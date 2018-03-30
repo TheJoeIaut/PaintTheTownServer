@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
+using PaintTheTownServer.Logger;
 
 namespace PaintTheTownServer
 {
@@ -20,6 +22,8 @@ namespace PaintTheTownServer
                 routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Services.Add(typeof(IExceptionLogger), new AiExceptionLogger());
         }
     }
 }
