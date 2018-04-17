@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintTheTownServer", "PaintTheTownServer\PaintTheTownServer.csproj", "{15C1193D-413C-4C3C-8306-D5C3A34BC927}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{C930FE83-C506-4A8D-A1C0-FAB746DB8C81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{15C1193D-413C-4C3C-8306-D5C3A34BC927}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15C1193D-413C-4C3C-8306-D5C3A34BC927}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15C1193D-413C-4C3C-8306-D5C3A34BC927}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C930FE83-C506-4A8D-A1C0-FAB746DB8C81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C930FE83-C506-4A8D-A1C0-FAB746DB8C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C930FE83-C506-4A8D-A1C0-FAB746DB8C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C930FE83-C506-4A8D-A1C0-FAB746DB8C81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

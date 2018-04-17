@@ -2,3 +2,11 @@ PaintTheTownServer/obj/
 PaintTheTownServer/bin/
 packages/Newtonsoft.Json.10.0.1/lib/net40/Newtonsoft.Json.dll
 packages/
+/Testing/obj
+/Testing/bin/Debug
+/.vs/PaintTheTownServer/v15/Server/sqlite3
+/.vs/PaintTheTownServer/v15/sqlite3/db.lock
+/.vs/PaintTheTownServer/v15/sqlite3/storage.ide-wal
+/.vs/PaintTheTownServer/v15/sqlite3/storage.ide-shm
+/.vs/slnx.sqlite
+/.vs/Server/v15
