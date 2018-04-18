@@ -17,6 +17,7 @@ using Microsoft.ApplicationInsights;
 using Microsoft.SqlServer.Types;
 using Newtonsoft.Json.Linq;
 using PaintTheTownServer.Filter;
+using PaintTheTownServer.Helper;
 
 namespace PaintTheTownServer.Controllers
 {
@@ -81,7 +82,7 @@ namespace PaintTheTownServer.Controllers
                 var intersectingAreas = context.CoveredAreas.Where(x => x.Geo.Intersects(newPolygon)).ToList();
                 
 
-                var user = GetUser(context);
+                var user = UserHelper.GetUser(context,RequestContext);
 
                 if (newPolygon.Length != null)
                     user.Statistic.DistanceWalked += (double)newPolygon.Length;
@@ -103,31 +104,6 @@ namespace PaintTheTownServer.Controllers
 
                 context.SaveChanges();
             }
-        }
-
-        private static User GetUser(PttContext context)
-        {
-            var subject = GetUserSubject();
-
-            if (!context.Users.Any(x => x.Id == subject))
-            {
-                context.Users.Add(new User
-                {
-                    Id = subject,
-                    Name = ""
-                });
-            }
-
-            var user = context.Users.FirstOrDefault(x => x.Id == subject);
-            return user;
-        }
-
-        private static string GetUserSubject()
-        {
-            var principal = Thread.CurrentPrincipal as ClaimsPrincipal;
-            var identity = principal?.Identity as ClaimsIdentity;
-            var subject = identity?.Claims.SingleOrDefault(x => x.Type == "user_id").Value;
-            return subject;
         }
 
         private SqlGeography MakePolygonValid(DbGeography polygon)

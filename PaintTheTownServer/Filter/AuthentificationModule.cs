@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Web;
+using Google.Apis.Auth;
 using Microsoft.IdentityModel.Tokens;
 
 namespace PaintTheTownServer.Filter
@@ -15,35 +16,33 @@ namespace PaintTheTownServer.Filter
     {
         private static SecurityKey[] _keys;
 
-        public ClaimsPrincipal ValidateJwtString(string authToken)
+        public async System.Threading.Tasks.Task<ClaimsPrincipal> ValidateJwtStringAsync(string authToken)
         {
-            if (_keys == null)
+            try
             {
-                if (GetKeys()) return null;
+                var payload = await GoogleJsonWebSignature.ValidateAsync(authToken);
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, payload.Name),
+                    new Claim(ClaimTypes.Name, payload.Name),
+                    new Claim(JwtRegisteredClaimNames.FamilyName, payload.FamilyName),
+                    new Claim(JwtRegisteredClaimNames.GivenName, payload.GivenName),
+                    new Claim(JwtRegisteredClaimNames.Email, payload.Email),
+                    new Claim(JwtRegisteredClaimNames.Sub, payload.Subject),
+                    new Claim(JwtRegisteredClaimNames.Iss, payload.Issuer),
+                };
+
+                var principal = new ClaimsPrincipal();
+                principal.AddIdentity(new ClaimsIdentity(claims));
+                return principal;
+            }
+            catch(Exception e)
+            {
+                throw;
             }
 
-            const string firebaseProjectId = "paintthetown-eb827";
-            var parameters = new TokenValidationParameters
-            {
-                ValidIssuer = "https://securetoken.google.com/" + firebaseProjectId,
-                ValidAudience = firebaseProjectId,
-                IssuerSigningKeys = _keys,
-            };
-
-            var handler = new JwtSecurityTokenHandler();
-            SecurityToken token;
-            ClaimsPrincipal principal = handler.ValidateToken(authToken, parameters, out token);
-            var jwt = (JwtSecurityToken)token;
-            if (jwt.Header.Alg != SecurityAlgorithms.RsaSha256)
-            {
-                throw new SecurityTokenInvalidSignatureException(
-                    "The token is not signed with the expected algorithm.");
-            }
-
-            var identity = principal.Identity as ClaimsIdentity;
-            identity?.AddClaim(new Claim("userSubject", jwt.Subject));
-
-            return principal;
+         
         }
 
         private static bool GetKeys()

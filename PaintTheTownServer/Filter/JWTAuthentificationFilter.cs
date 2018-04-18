@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
@@ -15,9 +16,9 @@ namespace PaintTheTownServer.Filter
     public class JWTAuthenticationFilter : AuthorizationFilterAttribute
     {
 
-        public override void OnAuthorization(HttpActionContext filterContext)
+        public override async Task OnAuthorizationAsync(HttpActionContext filterContext,  CancellationToken cancellationToken)
         {
-            if (!IsUserAuthorized(filterContext))
+            if (!await IsUserAuthorizedAsync(filterContext))
             {
                 ShowAuthenticationError(filterContext);
                 return;
@@ -25,7 +26,7 @@ namespace PaintTheTownServer.Filter
             base.OnAuthorization(filterContext);
         }
 
-        public bool IsUserAuthorized(HttpActionContext actionContext)
+        public async System.Threading.Tasks.Task<bool> IsUserAuthorizedAsync(HttpActionContext actionContext)
         {
             var authHeader = FetchFromHeader(actionContext);
 
@@ -33,12 +34,13 @@ namespace PaintTheTownServer.Filter
                 return false;
 
             var auth = new AuthenticationModule();
-            var principal= auth.ValidateJwtString(authHeader);
+            var principal= await auth.ValidateJwtStringAsync(authHeader);
 
             if (principal == null)
                 return false;
 
             Thread.CurrentPrincipal = principal;
+            actionContext.RequestContext.Principal = principal;
             return true;
         }
 

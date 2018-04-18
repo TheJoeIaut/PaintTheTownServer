@@ -7,9 +7,10 @@ using System.Web;
 namespace PaintTheTownServer.Models
 {
     public class User
-    {[Key]
+    {   [Key]
         public string Id { get; set; }
         public string Name { get; set; }
         public Statistic Statistic { get; set; }
+        public string RefreshToken { get; set; }
     }
 }
